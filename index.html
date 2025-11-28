@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveTOTP | Secure Browser-Based 2FA Generator</title>
+    <meta name="description" content="Generate secure TOTP codes directly in your browser. No server, no tracking, complete privacy.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+    
+    <!-- Welcome/Hero Screen -->
+    <section class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-container">
+            <div class="hero-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+        
+            <h1 class="hero-title">LiveTOTP</h1>
+            <p class="hero-subtitle">Your Privacy-First 2FA Generator</p>
+            <p class="hero-description">
+                Generate secure time-based one-time passwords directly in your browser. 
+                No servers, no tracking, complete privacy. Your secrets never leave your device.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">100% Client-Side</h3>
+                    <p class="feature-description">All processing happens in your browser. Zero server communication.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-Time Sync</h3>
+                    <p class="feature-description">Live TOTP codes that update every 30 seconds, in perfect sync.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <rect x="7" y="7" width="3" height="3"></rect>
+                            <rect x="14" y="7" width="3" height="3"></rect>
+                            <rect x="7" y="14" width="3" height="3"></rect>
+                            <rect x="14" y="14" width="3" height="3"></rect>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">QR Code Support</h3>
+                    <p class="feature-description">Easy setup with Google Authenticator and compatible apps.</p>
+                </div>
+            </div>
+            
+            <div class="hero-cta">
+                <button id="getStartedBtn" class="btn-hero">
+                    <span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 16 16 12 12 8"></polyline>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                        Get Started
+                    </span>
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main App Container -->
+    <div class="app-container" id="appContainer">
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <h1>LiveTOTP</h1>
+                </div>
+                <p>Secure, browser-based 2FA generator</p>
+            </header>
+            
+            <main>
+                <section class="generator">
+                    <button id="generateBtn" class="btn-primary">
+                        <span class="btn-content">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <rect x="7" y="7" width="3" height="3"></rect>
+                                <rect x="14" y="7" width="3" height="3"></rect>
+                                <rect x="7" y="14" width="3" height="3"></rect>
+                                <rect x="14" y="14" width="3" height="3"></rect>
+                            </svg>
+                            Generate New Secret
+                        </span>
+                    </button>
+                </section>
+
+                <section class="display" id="displaySection" style="display: none;">
+                    <div class="card totp-card">
+                        <div class="card-header">
+                            <h2>Current Code</h2>
+                            <div class="header-actions">
+                                <button id="howItWorksBtn" class="how-it-works-btn" title="Learn how TOTP works">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    How It Works
+                                </button>
+                                <div class="live-indicator">
+                                    <span class="dot"></span> Live
+                                </div>
+                            </div>
+                        </div>
+                        <div id="totpCode" class="totp-digits">000 000</div>
+                        <div class="timer-container">
+                            <svg class="timer-ring" width="70" height="70">
+                                <circle class="timer-ring-circle-bg" stroke="currentColor" stroke-width="5" fill="transparent" r="28" cx="35" cy="35"/>
+                                <circle id="timerRing" class="timer-ring-circle" stroke="currentColor" stroke-width="5" fill="transparent" r="28" cx="35" cy="35"/>
+                            </svg>
+                            <span id="timer" class="timer-text">30</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-row">
+                        <div class="card qr-card">
+                            <h2>Scan QR Code</h2>
+                            <div class="qr-wrapper">
+                                <div id="qrcode"></div>
+                            </div>
+                            <p class="instruction">Open Google Authenticator and scan this code to sync.</p>
+                        </div>
+
+                        <div class="card secret-card">
+                            <h2>Manual Entry</h2>
+                            <div class="secret-box">
+                                <code id="secretKey"></code>
+                                <button class="copy-btn" id="copyBtn" title="Copy to clipboard">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="instruction">Or enter this secret key manually in your authenticator app.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+        </div>
+    </div>
+    
+    <!-- Educational Modal -->
+    <div id="totpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>How TOTP Is Computed</h2>
+                <button id="closeModal" class="close-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">TOTP (Time-based One-Time Password) generates a unique 6-digit code using your secret key and the current time. Here's how it works:</p>
+                
+                <div class="computation-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Get Current Time Counter</h3>
+                        <p>Divide current Unix timestamp by 30 seconds to get a time counter.</p>
+                        <div class="code-block">
+                            <code>Current Time: <span id="modalCurrentTime">-</span> ms</code>
+                            <code>Unix Timestamp: <span id="modalUnixTime">-</span> seconds</code>
+                            <code>Time Counter: <span id="modalTimeCounter">-</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="computation-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Convert Secret Key</h3>
+                        <p>Your Base32-encoded secret is converted to bytes for cryptographic operations.</p>
+                        <div class="code-block">
+                            <code>Secret Key: <span id="modalSecret" class="secret-snippet">-</span></code>
+                            <code>Byte Length: <span id="modalSecretBytes">-</span> bytes</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="computation-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>HMAC-SHA1 Computation</h3>
+                        <p>The time counter is hashed with your secret using HMAC-SHA1 algorithm.</p>
+                        <div class="code-block">
+                            <code>HMAC-SHA1(secret, timeCounter)</code>
+                            <code>Result: <span id="modalHmac" class="hash-result">-</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="computation-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Dynamic Truncation</h3>
+                        <p>Extract a 4-byte segment from the HMAC result using dynamic offset.</p>
+                        <div class="code-block">
+                            <code>Offset: <span id="modalOffset">-</span> (last 4 bits of HMAC)</code>
+                            <code>Extract 4 bytes starting at offset</code>
+                            <code>Result: <span id="modalTruncated">-</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="computation-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Generate Final Code</h3>
+                        <p>Apply modulo 1,000,000 to get a 6-digit code, then format it.</p>
+                        <div class="code-block">
+                            <code>Code = <span id="modalCodeCalc">-</span> mod 1,000,000</code>
+                            <code class="final-code">Final TOTP: <span id="modalFinalCode">-</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer-info">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <p>This entire process happens in your browser. Your secret key never leaves your device.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
